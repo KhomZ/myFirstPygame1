@@ -1,0 +1,398 @@
+#/*
+# 1. Introduction to PyGame
+
+# Welcome to the introduction to PyGame and Python 3 video gaming programming!
+# Suggested Requirements for this series
+# You may wish to be familiar with the basics of the Python 3 programming
+# language, or at least the basics of Programming in general
+
+# That said, this course begins at a slowish pace, and I do my best to explain
+# everything at least the first time it shows up. PyGame can actually be a wonderful
+# starting place for your journey in Python.
+
+# First, you're going to need PyGame!
+
+# @author khom
+# @ikhomkodes
+
+import pygame
+
+pygame.init()
+=> Above, we've imported PyGame, which is obviously necessary to make use of the
+  module! Then, we run pygame.init(), which is integral to every single PyGame
+  application that you will ever write. This will initiate PyGame, and allows you to
+  then make various commands with PyGame and our game.
+
+
+gameDisplay = pygame.display.set_mode((800,600))
+pygame.display.set_caption('A bit Racey')
+ => Next, we define our game's display, which is the main "display" for our game. You
+  may also see this referred to as a "surface", as this is basically our canvas that
+  we will draw things to, and the function literally returns a pygame. Surface object. We
+  are saying right now that we want the resolution of our game to be 800 px wide
+  and 600 px tall. Take note that this is a tuple as a function argument. If you do not
+  make this a tuple with parenthesis, then 600 and 800 will be treated as separate
+  parameters and the function will blow up. It's a big deal.
+
+  After that, we define our display's "caption". To me, it's more like a title, and is the
+  title of the window. We've decided to call our game "A bit Racey".(tm!)
+
+
+clock = pygame.time.Clock()
+=> Simple enough, this is our game clock. We use this to track time within the
+  game, and this is mostly used for FPS, or "frames per second". While somewhat
+  trivial seeming, FPS is very important, and can be tweaked as we will see later.
+  For the most part, the average human eye can see ~30 FPS. It's important to note,
+  however, that this is only a very general statement, since every human eye is
+  slightly different, and the human eye does not process things in "frames". The
+  better way to put it is that after about 30 FPS, people generally cannot tell the
+  difference.
+
+  Take that 60 FPS YouTube. Anyway, we can increase FPS to literally speed up the
+  game, or slow them down to slow down the game. This isn't ideal, especially
+  when speeding up FPS, as the entire game loop is run per frame, and might be a
+  massive waste of processing. More on this later though!
+
+
+
+
+
+crashed = False
+
+while not crashed:
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            crashed = True
+
+        print(event)
+
+    pygame.display.update()
+    clock.tick(60)
+#
+# Okay, a bit more here. I don't like to separate loops and functions it I don't have to,
+# since it can cause people to get indentation wrong. So, first, we've got a crashed = False
+# statement, which is just a variable that we set initially. Then, we run out
+# "game loop", which will run until we crash. Currently, the only way we're saying
+# crashed = True is if the user exits out of the window, however.
+
+# You'll notice here that we have a for loop within this while loop. This is going to be
+# present in most PyGame scripts, where events are constantly being logged. It is
+# shown in the video, but not here, but you can still try it: Try adding "print event"
+# above the if statement. You will see in your console everything you do within the
+# PyGame window. Pretty neat!
+
+# After our if statement. you'll see that we run a pygame.display.update. It's
+# important to note the difference between display.update and display.flip.
+# Display.flip will update the entire surface. Basically the entire screen.
+# Display.update can just update specific areas of the screen. That said, if you do
+# not pass a parameter, then update will update the entire surface as well, basically
+# making flip() pointless for our interests. There might come times when you want
+# to use flip for very specific tasks, however.
+
+# The last thing within this while loop is clock.tick(60). Basically, this is how many
+# frames per second we are running. In this case, we are running 60 FPS.
+#
+
+
+pygame.quit()
+quit()
+# Once we have broken our game loop, we want to run a pygame.quit(). This will
+# end our pygame instance. Then we can run a simple quit(), which exit Python
+# and the application.
+#
+
+-----------------------------------------------------------------------------------------------------------------------
+=======================================================================================================================
+-----------------------------------------------------------------------------------------------------------------------
+
+
+# 2. Displaying images with PyGame
+In this PyGame tutorial, we cover how to display custom-created game images to
+the screen. You can also draw objects to the screen using coordinates, which we
+will cover later. Here, we've created some award-winning graphics that we
+definitely want in our game, so we want to know how to get it to show up.
+
+source code ==>
+------------------------------------------------------------------------------------
+import pygame
+
+pygame.init()
+
+display_width = 800
+display_height = 600
+
+gameDisplay = pygame.display.set_mode((display_width,display_height))
+pygame.display.set_caption('A bit Racey')
+
+black = (0,0,0)
+white = (255,255,255)
+
+clock = pygame.time.Clock()
+crashed = False
+carImg = pygame.image.load('racecar.png')
+
+def car(x,y):
+    gameDisplay.blit(carImg, (x,y))
+
+x =  (display_width * 0.45)
+y = (display_height * 0.8)
+
+while not crashed:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            crashed = True
+
+    gameDisplay.fill(white)
+    car(x,y)
+
+
+    pygame.display.update()
+    clock.tick(60)
+
+pygame.quit()
+quit()
+------------------------------------------------------------------------------------
+
+So, here we've gone ahead and embedded the new code in our existing script.
+First, we use:
+    display_width = 800
+    display_height = 600
+
+    gameDisplay = pygame.display.set_mode((display_width,display_height))
+
+
+The functioning here is the same as before, but this time we're not hard coding
+the resolution. We want to use this method so that we can reference the
+variables. We're going to see how useful that can be already in this script, but
+even more later on.
+
+Then, here:
+    black = (0,0,0)
+    white = (255,255,255)
+
+We're defining our colors, using RGB formatting. If you want to know a bit more
+about RGB, check out the video.
+
+Next up:
+    carImg = pygame.image.load('racecar.png')
+
+
+Here, we load the racecar.png image to our carImg variable. racecar.png is an
+image that I have personally created. See the video for some tips to create an
+image, pull one from Google Images, or make your own. Chances are, you will do
+better than I did!
+
+    def car(x,y):
+        gameDisplay.blit(carImg, (x,y))
+
+Now, we define our car function, which really just places the car to the display.
+"Blit" basically just draws the image to the screen, but we still have yet to fully
+show it to the display. In graphics, generally, there is a lot done in the background,
+and only when every update is done is when the screen is visually updated.
+    x =  (display_width * 0.45)
+    y = (display_height * 0.8)
+
+Here, we've defined the starting points for our car. See how we used out
+previously-defined variables? We're already seeing how this could be useful,
+especially if we EVER want to change our resolution. A lot of people start out
+writing programs, thinking that some of the variables will just never be changed.
+I've done it a few times. Always wrong and regretful.
+
+Now, within our while loop, we see the addition of:
+        gameDisplay.fill(white)
+        car(x,y)
+
+Here, we've filled our display with a color, white. What this does is cover
+everything in white. Paint the game white, so-to-speak. This will cover over any
+existing stuff. After that, we run our car function to draw the car to the screen.
+Always keep in mind the order here. If you drew the car first, then called the
+gameDisplay.fill function, you would have just covered your car and it would not
+show up.
+
+Also, if you'd like the same image I used:
+
+-----------------------------------------------------------------------------------------------------------------------
+=======================================================================================================================
+-----------------------------------------------------------------------------------------------------------------------
+
+
+# 3. Moving an image around in PyGame
+In this PyGame with Python 3 tutorial, we cover how to move our epic race car
+image about using key inputs from the user. Luckily for us, PyGame handles a lot
+of the event handling in the background, simply feeding us the events that have
+happened, allowing us to then do what we please.
+
+Let's see an example:
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------
+=======================================================================================================================
+-----------------------------------------------------------------------------------------------------------------------
+
+
+# 4. Adding boundaries
+
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------
+=======================================================================================================================
+-----------------------------------------------------------------------------------------------------------------------
+
+
+# 5. Displaying text to PyGame screen
+
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------
+=======================================================================================================================
+-----------------------------------------------------------------------------------------------------------------------
+
+
+# 6. Drawing objects with PyGame
+
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------
+=======================================================================================================================
+-----------------------------------------------------------------------------------------------------------------------
+
+
+# 7. Crashing
+
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------
+=======================================================================================================================
+-----------------------------------------------------------------------------------------------------------------------
+
+
+# 8. PyGame Score
+
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------
+=======================================================================================================================
+-----------------------------------------------------------------------------------------------------------------------
+
+
+# 9. Drawing Objects and Shapes in PyGame
+
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------
+=======================================================================================================================
+-----------------------------------------------------------------------------------------------------------------------
+
+
+
+# 10. Creating a start menu
+
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------
+=======================================================================================================================
+-----------------------------------------------------------------------------------------------------------------------
+
+
+
+# 11. PyGame Buttons, part 1, drawing the rectangle
+
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------
+=======================================================================================================================
+-----------------------------------------------------------------------------------------------------------------------
+
+
+
+# 12. PyGame Buttons, part 2, making the buttons interactive
+
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------
+=======================================================================================================================
+-----------------------------------------------------------------------------------------------------------------------
+
+
+# 13. PyGame Buttons, part 3, adding text to the button
+
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------
+=======================================================================================================================
+-----------------------------------------------------------------------------------------------------------------------
+
+
+# 14. PyGame Buttons, part 4, creating a general PyGame button function
+
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------
+=======================================================================================================================
+-----------------------------------------------------------------------------------------------------------------------
+
+
+# 15. PyGame Buttons, part 5, running functions on a button click
+
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------
+=======================================================================================================================
+-----------------------------------------------------------------------------------------------------------------------
+
+
+# 16. Converting PyGame to an executable
+
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------
+=======================================================================================================================
+-----------------------------------------------------------------------------------------------------------------------
+
+
+# 17. Adding a pause function to our game and Game Over
+
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------
+=======================================================================================================================
+-----------------------------------------------------------------------------------------------------------------------
+
+
+
+# 18. PyGame Icon
+
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------
+=======================================================================================================================
+-----------------------------------------------------------------------------------------------------------------------
+
+
+# 19. Sounds and Music with PyGame
+
+------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+
+
+end
+-----------------------------------------------------------------------------------------------------------------------
+=======================================================================================================================
+-----------------------------------------------------------------------------------------------------------------------
